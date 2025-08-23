@@ -1,5 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getDatabase, ref, onValue, off } from 'firebase/database';
+import { get } from 'firebase/database';
 import { getMessaging, getToken, onMessage } from 'firebase/messaging';
 
 // Firebase configuration - Replace with your actual config
@@ -23,8 +24,8 @@ export interface SensorData {
   temperature: number;
   humidity: number;
   airPurity: number;
-  timestamp: string;
-  status: 'online' | 'offline';
+  timestamp?: string | number;
+  status?: 'online' | 'offline';
 }
 
 export interface HistoricalData {
@@ -221,3 +222,47 @@ export const getSensorStatus = (data: SensorData | null) => {
   
   return 'normal';
 };
+
+// ---- Time parsing utilities ----
+export function parseTimestamp(ts: string | number | undefined | null): Date | null {
+  if (ts === undefined || ts === null) return null;
+  if (typeof ts === 'number') {
+    // Heuristic: seconds vs. milliseconds
+    const ms = ts < 1e12 ? ts * 1000 : ts;
+    const d = new Date(ms);
+    return isNaN(d.getTime()) ? null : d;
+  }
+  const s = String(ts).trim();
+  // If format is "YYYY-MM-DD HH:MM:SS", normalize to ISO
+  let normalized = s;
+  if (/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}(\.\d+)?$/.test(s)) {
+    normalized = s.replace(' ', 'T') + 'Z';
+  }
+  // If it's ISO without timezone, assume UTC
+  if (/^\d{4}-\d{2}-\d{2}T/.test(s) && !/[Zz]|[+-]\d{2}:\d{2}$/.test(s)) {
+    normalized = s + 'Z';
+  }
+  let d = new Date(normalized);
+  if (!isNaN(d.getTime())) return d;
+  d = new Date(s);
+  return isNaN(d.getTime()) ? null : d;
+}
+
+
+// Estimate last-seen from history if live timestamp is missing/invalid
+export const getLastSeenEstimate = async (): Promise<Date | null> => {
+  try {
+    const historyRef = ref(database, 'history');
+    const snap = await get(historyRef);
+    const data = snap.val();
+    if (!data) return null;
+    // Keys are ISO timestamps; simple lexicographic max works
+    const keys = Object.keys(data).sort();
+    const lastKey = keys[keys.length - 1];
+    return parseTimestamp(lastKey);
+  } catch (e) {
+    console.warn('getLastSeenEstimate failed:', e);
+    return null;
+  }
+};
+

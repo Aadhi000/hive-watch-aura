@@ -1,16 +1,14 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Wifi, WifiOff, Clock } from 'lucide-react';
-import { SensorData } from '@/lib/firebase';
+import { SensorData, getLastSeenEstimate, parseTimestamp } from '@/lib/firebase';
 
 interface StatusIndicatorProps {
   data: SensorData | null;
 }
 
 const StatusIndicator: React.FC<StatusIndicatorProps> = ({ data }) => {
+  const isOnline = data && data.status === 'online';
   const lastSeen = data?.timestamp ? new Date(data.timestamp) : null;
-  
-  // System is online if data was updated within the last 5 minutes
-  const isOnline = lastSeen && (new Date().getTime() - lastSeen.getTime()) < 5 * 60 * 1000;
 
   const getLastSeenText = () => {
     if (!lastSeen) return 'Never';
