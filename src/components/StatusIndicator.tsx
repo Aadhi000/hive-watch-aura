@@ -7,8 +7,10 @@ interface StatusIndicatorProps {
 }
 
 const StatusIndicator: React.FC<StatusIndicatorProps> = ({ data }) => {
-  const isOnline = data && data.status === 'online';
   const lastSeen = data?.timestamp ? new Date(data.timestamp) : null;
+  
+  // System is online if data was updated within the last 5 minutes
+  const isOnline = lastSeen && (new Date().getTime() - lastSeen.getTime()) < 5 * 60 * 1000;
 
   const getLastSeenText = () => {
     if (!lastSeen) return 'Never';
