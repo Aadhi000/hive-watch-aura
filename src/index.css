@@ -2,41 +2,78 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* Beehive Monitor PWA Design System - Modern IoT Dashboard Theme */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Core Theme - Light Mode */
+    --background: 215 28% 17%;
+    --foreground: 213 27% 84%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    /* Card System - Neumorphic Design */
+    --card: 215 25% 20%;
+    --card-foreground: 213 27% 84%;
+    --card-border: 215 15% 25%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    /* Interactive Elements */
+    --popover: 215 25% 20%;
+    --popover-foreground: 213 27% 84%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    /* Brand Colors - Professional Green/Blue Palette */
+    --primary: 158 64% 52%;
+    --primary-foreground: 215 28% 17%;
+    --primary-glow: 158 64% 62%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    /* Status Colors */
+    --secondary: 215 20% 65%;
+    --secondary-foreground: 215 28% 17%;
+    
+    --success: 142 71% 45%;
+    --success-foreground: 215 28% 17%;
+    
+    --warning: 38 92% 50%;
+    --warning-foreground: 215 28% 17%;
+    
+    --danger: 0 84% 60%;
+    --danger-foreground: 213 27% 84%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    /* Subtle Elements */
+    --muted: 215 20% 35%;
+    --muted-foreground: 215 15% 70%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 215 25% 30%;
+    --accent-foreground: 213 27% 84%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 213 27% 84%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    /* Form Elements */
+    --border: 215 15% 35%;
+    --input: 215 20% 25%;
+    --ring: 158 64% 52%;
 
-    --radius: 0.5rem;
+    /* Design Tokens */
+    --radius: 1rem;
+    
+    /* Beehive Specific - Sensor Status */
+    --sensor-normal: 142 71% 45%;
+    --sensor-warning: 38 92% 50%;
+    --sensor-danger: 0 84% 60%;
+    --sensor-offline: 215 15% 50%;
+    
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-glow)));
+    --gradient-card: linear-gradient(145deg, hsl(var(--card)), hsl(215 20% 18%));
+    --gradient-danger: linear-gradient(135deg, hsl(var(--danger)), hsl(0 84% 70%));
+    
+    /* Shadows & Effects */
+    --shadow-neumorphic: 0 8px 32px -4px hsl(var(--background) / 0.3), 0 4px 16px -2px hsl(var(--primary) / 0.1);
+    --shadow-glow: 0 0 30px hsl(var(--primary-glow) / 0.3);
+    --shadow-danger: 0 0 20px hsl(var(--danger) / 0.4);
+    
+    /* Animations */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 
     --sidebar-background: 0 0% 98%;
 
@@ -56,33 +93,49 @@ All colors MUST be HSL.
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+    /* Dark Mode - Deep Professional */
+    --background: 215 28% 8%;
+    --foreground: 213 27% 88%;
 
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
+    --card: 215 25% 12%;
+    --card-foreground: 213 27% 88%;
+    --card-border: 215 15% 18%;
 
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 215 25% 12%;
+    --popover-foreground: 213 27% 88%;
 
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    --primary: 158 64% 55%;
+    --primary-foreground: 215 28% 8%;
+    --primary-glow: 158 64% 65%;
 
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 215 20% 25%;
+    --secondary-foreground: 213 27% 88%;
+    
+    --success: 142 71% 50%;
+    --success-foreground: 215 28% 8%;
+    
+    --warning: 38 92% 55%;
+    --warning-foreground: 215 28% 8%;
+    
+    --danger: 0 84% 65%;
+    --danger-foreground: 213 27% 88%;
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted: 215 20% 20%;
+    --muted-foreground: 215 15% 65%;
 
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 215 25% 18%;
+    --accent-foreground: 213 27% 88%;
 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 84% 65%;
+    --destructive-foreground: 213 27% 88%;
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
+    --border: 215 15% 20%;
+    --input: 215 20% 15%;
+    --ring: 158 64% 55%;
+    
+    /* Dark Mode Gradients */
+    --gradient-card: linear-gradient(145deg, hsl(var(--card)), hsl(215 20% 10%));
+    --shadow-neumorphic: 0 8px 32px -4px hsl(var(--background) / 0.5), 0 4px 16px -2px hsl(var(--primary) / 0.15);
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
@@ -100,6 +153,149 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans antialiased;
+    transition: var(--transition-smooth);
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@layer components {
+  /* Sensor Card Variants */
+  .sensor-card {
+    @apply bg-gradient-to-br from-card to-card/80 backdrop-blur-sm border border-card-border rounded-2xl p-6 relative overflow-hidden;
+    box-shadow: var(--shadow-neumorphic);
+    transition: var(--transition-smooth);
+  }
+  
+  .sensor-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-neumorphic), var(--shadow-glow);
+  }
+  
+  .sensor-card.status-normal {
+    @apply border-success/30;
+  }
+  
+  .sensor-card.status-warning {
+    @apply border-warning/50;
+    animation: pulse-warning 2s ease-in-out infinite;
+  }
+  
+  .sensor-card.status-danger {
+    @apply border-danger/70;
+    animation: pulse-danger 1.5s ease-in-out infinite;
+    box-shadow: var(--shadow-neumorphic), var(--shadow-danger);
+  }
+  
+  .sensor-card.status-offline {
+    @apply border-sensor-offline/30 opacity-75;
+  }
+
+  /* Chart Container */
+  .chart-container {
+    @apply bg-card/50 backdrop-blur-sm border border-card-border rounded-xl p-4;
+    box-shadow: inset 0 2px 8px hsl(var(--background) / 0.1);
+  }
+
+  /* Theme Toggle Button */
+  .theme-toggle {
+    @apply bg-card/80 backdrop-blur-sm border border-card-border rounded-full p-3 hover:bg-card;
+    box-shadow: var(--shadow-neumorphic);
+    transition: var(--transition-bounce);
+  }
+  
+  .theme-toggle:hover {
+    transform: scale(1.05);
+  }
+
+  /* Status Indicator */
+  .status-indicator {
+    @apply flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium;
+  }
+  
+  .status-indicator.online {
+    @apply bg-success/20 text-success border border-success/30;
+  }
+  
+  .status-indicator.offline {
+    @apply bg-sensor-offline/20 text-sensor-offline border border-sensor-offline/30;
+  }
+
+  /* Range Selector */
+  .range-button {
+    @apply px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200;
+    @apply bg-muted/50 text-muted-foreground hover:bg-muted hover:text-foreground;
+  }
+  
+  .range-button.active {
+    @apply bg-primary text-primary-foreground;
+    box-shadow: 0 0 20px hsl(var(--primary) / 0.3);
+  }
+}
+
+@layer utilities {
+  /* Animations */
+  @keyframes pulse-warning {
+    0%, 100% { 
+      border-color: hsl(var(--warning) / 0.5);
+      box-shadow: var(--shadow-neumorphic);
+    }
+    50% { 
+      border-color: hsl(var(--warning) / 0.8);
+      box-shadow: var(--shadow-neumorphic), 0 0 25px hsl(var(--warning) / 0.4);
+    }
+  }
+  
+  @keyframes pulse-danger {
+    0%, 100% { 
+      border-color: hsl(var(--danger) / 0.7);
+      box-shadow: var(--shadow-neumorphic), var(--shadow-danger);
+    }
+    50% { 
+      border-color: hsl(var(--danger) / 1);
+      box-shadow: var(--shadow-neumorphic), 0 0 35px hsl(var(--danger) / 0.6);
+    }
+  }
+  
+  @keyframes fade-in {
+    from { 
+      opacity: 0; 
+      transform: translateY(20px) scale(0.95); 
+    }
+    to { 
+      opacity: 1; 
+      transform: translateY(0) scale(1); 
+    }
+  }
+  
+  @keyframes slide-in {
+    from { 
+      opacity: 0; 
+      transform: translateX(-20px); 
+    }
+    to { 
+      opacity: 1; 
+      transform: translateX(0); 
+    }
+  }
+  
+  .animate-fade-in {
+    animation: fade-in 0.5s ease-out forwards;
+  }
+  
+  .animate-slide-in {
+    animation: slide-in 0.4s ease-out forwards;
+  }
+  
+  /* Gradient Utilities */
+  .bg-gradient-primary {
+    background: var(--gradient-primary);
+  }
+  
+  .bg-gradient-card {
+    background: var(--gradient-card);
   }
 }

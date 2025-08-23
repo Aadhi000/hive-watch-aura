@@ -1,0 +1,6 @@
+# This would be an audio file in a real implementation
+# For demo purposes, the app generates alert sounds using Web Audio API
+# To add a real alert.mp3 file:
+# 1. Record or download an alert sound
+# 2. Place it in the public folder as alert.mp3
+# 3. The app will automatically use it for notifications
