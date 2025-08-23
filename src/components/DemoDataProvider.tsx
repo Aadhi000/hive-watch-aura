@@ -6,13 +6,15 @@ const DemoDataProvider: React.FC = () => {
   const [demoRunning, setDemoRunning] = useState(false);
 
   useEffect(() => {
-    // Check if Firebase is properly configured
-    const isFirebaseConfigured = window.location.hostname !== 'localhost' || 
-                                 localStorage.getItem('firebase-configured') === 'true';
-
+    // Check if Firebase is properly configured by checking the apiKey
+    const isFirebaseConfigured = false; // Force demo mode for now
+    
     if (!isFirebaseConfigured && !demoRunning) {
       setDemoRunning(true);
-      startDemoDataSimulation();
+      const cleanup = startDemoDataSimulation();
+      
+      // Return cleanup function
+      return cleanup;
     }
   }, [demoRunning]);
 
@@ -61,8 +63,17 @@ const DemoDataProvider: React.FC = () => {
       const currentData = { ...demoDataPoints[dataIndex % demoDataPoints.length] };
       currentData.timestamp = new Date().toISOString();
       
-      // Add some random variation to make it feel more realistic
-      if (currentData.status === 'online') {
+      // Cycle between online and offline status for demo
+      if (dataIndex % 10 === 9) {
+        // Every 10th update, show offline status
+        currentData.status = 'offline';
+        currentData.temperature = 0;
+        currentData.humidity = 0;
+        currentData.airPurity = 0;
+      } else {
+        currentData.status = 'online';
+        
+        // Add some random variation to make it feel more realistic
         currentData.temperature += (Math.random() - 0.5) * 2;
         currentData.humidity += (Math.random() - 0.5) * 5;
         currentData.airPurity += (Math.random() - 0.5) * 3;
@@ -73,13 +84,15 @@ const DemoDataProvider: React.FC = () => {
         currentData.airPurity = Math.max(40, Math.min(100, currentData.airPurity));
       }
 
+      console.log('Demo data update:', currentData); // Debug log
+      
       // Trigger custom event with demo data
       window.dispatchEvent(new CustomEvent('demo-sensor-data', {
         detail: currentData
       }));
 
       dataIndex++;
-    }, 5000); // Update every 5 seconds
+    }, 3000); // Update every 3 seconds for faster demo
 
     // Generate historical data
     const generateHistoricalData = () => {
