@@ -4,10 +4,10 @@ import { getMessaging, getToken, onMessage } from 'firebase/messaging';
 
 // Firebase configuration - Replace with your actual config
 const firebaseConfig = {
-  apiKey: "your-api-key",
-  authDomain: "your-project.firebaseapp.com",
-  databaseURL: "https://your-project-default-rtdb.firebaseio.com/",
-  projectId: "your-project-id",
+  apiKey: "AIzaSyD4M_ZOMqR9MtSkbgH2SQQvj2QSAFKLOhU",
+  authDomain: "beehive-d31e3.firebaseapp.com",
+  databaseURL: "https://beehive-d31e3-default-rtdb.asia-southeast1.firebasedatabase.app/",
+  projectId: "beehive-d31e3",
   storageBucket: "your-project.appspot.com",
   messagingSenderId: "123456789",
   appId: "your-app-id"
