@@ -13,8 +13,10 @@ const Dashboard: React.FC = () => {
   const [lastAlertTime, setLastAlertTime] = useState<number>(0);
 
   useEffect(() => {
+    console.log('Dashboard: Setting up Firebase subscription');
     // Subscribe to real-time sensor data
     const unsubscribe = subscribeToSensorData((data) => {
+      console.log('Dashboard: Received sensor data:', data);
       setSensorData(data);
       
       // Check for alerts
