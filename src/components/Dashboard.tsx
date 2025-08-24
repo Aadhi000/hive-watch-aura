@@ -204,13 +204,13 @@ const Dashboard: React.FC = () => {
             {/* Air Purity Card */}
             <div className="space-y-4">
               <SensorCard
-                type="airPurity"
+                type="airpurity"
                 data={sensorData}
-                onClick={() => handleCardClick('airPurity')}
+                onClick={() => handleCardClick('airpurity')}
               />
               <SensorChart
-                type="airPurity"
-                isVisible={expandedChart === 'airPurity'}
+                type="airpurity"
+                isVisible={expandedChart === 'airpurity'}
               />
             </div>
           </div>

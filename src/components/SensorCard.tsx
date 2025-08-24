@@ -3,7 +3,7 @@ import { Thermometer, Droplets, Wind, AlertTriangle, CheckCircle, WifiOff } from
 import { SensorData, SENSOR_THRESHOLDS } from '@/lib/firebase';
 
 interface SensorCardProps {
-  type: 'temperature' | 'humidity' | 'airPurity';
+  type: 'temperature' | 'humidity' | 'airpurity';
   data: SensorData | null;
   onClick: () => void;
 }
@@ -15,7 +15,7 @@ const SensorCard: React.FC<SensorCardProps> = ({ type, data, onClick }) => {
         return <Thermometer className="w-8 h-8" />;
       case 'humidity':
         return <Droplets className="w-8 h-8" />;
-      case 'airPurity':
+      case 'airpurity':
         return <Wind className="w-8 h-8" />;
     }
   };
@@ -26,7 +26,7 @@ const SensorCard: React.FC<SensorCardProps> = ({ type, data, onClick }) => {
         return 'Temperature';
       case 'humidity':
         return 'Humidity';
-      case 'airPurity':
+      case 'airpurity':
         return 'Air Purity';
     }
   };
@@ -41,7 +41,7 @@ const SensorCard: React.FC<SensorCardProps> = ({ type, data, onClick }) => {
       case 'temperature':
         return '°C';
       case 'humidity':
-      case 'airPurity':
+      case 'airpurity':
         return '%';
     }
   };

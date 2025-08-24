@@ -27,7 +27,7 @@ ChartJS.register(
 );
 
 interface SensorChartProps {
-  type: 'temperature' | 'humidity' | 'airPurity';
+  type: 'temperature' | 'humidity' | 'airpurity';
   isVisible: boolean;
 }
 
@@ -51,7 +51,7 @@ const SensorChart: React.FC<SensorChartProps> = ({ type, isVisible }) => {
           primary: 'rgb(59, 130, 246)', // blue
           secondary: 'rgba(59, 130, 246, 0.1)'
         };
-      case 'airPurity':
+      case 'airpurity':
         return {
           primary: 'rgb(16, 185, 129)', // emerald
           secondary: 'rgba(16, 185, 129, 0.1)'
@@ -65,7 +65,7 @@ const SensorChart: React.FC<SensorChartProps> = ({ type, isVisible }) => {
         return 'Temperature (°C)';
       case 'humidity':
         return 'Humidity (%)';
-      case 'airPurity':
+      case 'airpurity':
         return 'Air Purity (%)';
     }
   };

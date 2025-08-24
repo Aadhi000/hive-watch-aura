@@ -3,15 +3,16 @@ import { getDatabase, ref, onValue, off } from 'firebase/database';
 import { get } from 'firebase/database';
 import { getMessaging, getToken, onMessage } from 'firebase/messaging';
 
-// Firebase configuration - Replace with your actual config
+// Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyD4M_ZOMqR9MtSkbgH2SQQvj2QSAFKLOhU",
   authDomain: "beehive-d31e3.firebaseapp.com",
-  databaseURL: "https://beehive-d31e3-default-rtdb.asia-southeast1.firebasedatabase.app/",
+  databaseURL: "https://beehive-d31e3-default-rtdb.asia-southeast1.firebasedatabase.app",
   projectId: "beehive-d31e3",
-  storageBucket: "your-project.appspot.com",
-  messagingSenderId: "123456789",
-  appId: "your-app-id"
+  storageBucket: "beehive-d31e3.firebasestorage.app",
+  messagingSenderId: "412298384436",
+  appId: "1:412298384436:web:469569b024f27482456661",
+  measurementId: "G-P6FF4EJC3K"
 };
 
 // Initialize Firebase
@@ -23,7 +24,7 @@ export const messaging = getMessaging(app);
 export interface SensorData {
   temperature: number;
   humidity: number;
-  airPurity: number;
+  airpurity: number;
   timestamp?: string | number;
   status?: 'online' | 'offline';
 }
@@ -36,32 +37,28 @@ export interface HistoricalData {
 export const SENSOR_THRESHOLDS = {
   temperature: { min: 18, max: 30 },
   humidity: { min: 60 },
-  airPurity: { min: 60 }
+  airpurity: { min: 60 }
 };
 
 // Real-time data listener
 export const subscribeToSensorData = (callback: (data: SensorData | null) => void) => {
-  // Check if Firebase is properly configured
-  const isConfigured = firebaseConfig.apiKey !== "your-api-key";
-  
-  if (!isConfigured) {
-    // Use demo data for development/testing
-    const handleDemoData = (event: CustomEvent) => {
-      callback(event.detail as SensorData);
-    };
-    
-    window.addEventListener('demo-sensor-data', handleDemoData as EventListener);
-    
-    return () => {
-      window.removeEventListener('demo-sensor-data', handleDemoData as EventListener);
-    };
-  }
-  
   // Real Firebase implementation
   const sensorRef = ref(database, 'beehive');
   onValue(sensorRef, (snapshot) => {
     const data = snapshot.val();
-    callback(data);
+    if (data) {
+      // Determine status based on timestamp
+      const now = new Date();
+      const lastUpdate = parseTimestamp(data.timestamp);
+      const isOnline = lastUpdate && (now.getTime() - lastUpdate.getTime()) < 5 * 60 * 1000; // 5 minutes
+      
+      callback({
+        ...data,
+        status: isOnline ? 'online' : 'offline'
+      });
+    } else {
+      callback(null);
+    }
   });
   
   return () => off(sensorRef);
@@ -69,50 +66,6 @@ export const subscribeToSensorData = (callback: (data: SensorData | null) => voi
 
 // Historical data fetcher
 export const fetchHistoricalData = async (range: string): Promise<HistoricalData> => {
-  // Check if Firebase is properly configured
-  const isConfigured = firebaseConfig.apiKey !== "your-api-key";
-  
-  if (!isConfigured) {
-    // Use demo data
-    const demoData = sessionStorage.getItem('demo-historical-data');
-    const allData: HistoricalData = demoData ? JSON.parse(demoData) : {};
-    
-    // Filter data based on range
-    const now = new Date();
-    const filtered: HistoricalData = {};
-    
-    Object.entries(allData).forEach(([timestamp, sensorData]) => {
-      const dataTime = new Date(timestamp);
-      const diffHours = (now.getTime() - dataTime.getTime()) / (1000 * 60 * 60);
-      
-      let includeData = false;
-      switch (range) {
-        case 'Live':
-          includeData = diffHours <= 1;
-          break;
-        case '24H':
-          includeData = diffHours <= 24;
-          break;
-        case '7D':
-          includeData = diffHours <= 168;
-          break;
-        case '15D':
-          includeData = diffHours <= 360;
-          break;
-        case '30D':
-          includeData = diffHours <= 720;
-          break;
-        default:
-          includeData = true;
-      }
-      
-      if (includeData) {
-        filtered[timestamp] = sensorData as SensorData;
-      }
-    });
-    
-    return Promise.resolve(filtered);
-  }
   
   return new Promise((resolve) => {
     const historyRef = ref(database, 'history');
@@ -166,7 +119,7 @@ export const setupPushNotifications = async (): Promise<string | null> => {
     }
     
     const token = await getToken(messaging, {
-      vapidKey: 'your-vapid-key' // Replace with your VAPID key
+      vapidKey: 'BKxvZ-qX8yQz8tY5V6wX9uP0qR3sT4v5W6xY7z8A9bC0dE1fG2hI3jK4lM5nO6pQ7rS8tU9vW0xY1z2A3bC4dE5f' // Replace with your actual VAPID key
     });
     
     // Listen for foreground messages
@@ -200,12 +153,12 @@ export const getSensorStatus = (data: SensorData | null) => {
     return 'offline';
   }
   
-  const { temperature, humidity, airPurity } = data;
-  const { temperature: tempThresh, humidity: humThresh, airPurity: airThresh } = SENSOR_THRESHOLDS;
+  const { temperature, humidity, airpurity } = data;
+  const { temperature: tempThresh, humidity: humThresh, airpurity: airThresh } = SENSOR_THRESHOLDS;
   
   const tempDanger = temperature < tempThresh.min || temperature > tempThresh.max;
   const humDanger = humidity < humThresh.min;
-  const airDanger = airPurity < airThresh.min;
+  const airDanger = airpurity < airThresh.min;
   
   if (tempDanger || humDanger || airDanger) {
     return 'danger';
@@ -214,7 +167,7 @@ export const getSensorStatus = (data: SensorData | null) => {
   // Warning for values approaching thresholds (within 10% margin)
   const tempWarning = temperature < tempThresh.min * 1.1 || temperature > tempThresh.max * 0.9;
   const humWarning = humidity < humThresh.min * 1.1;
-  const airWarning = airPurity < airThresh.min * 1.1;
+  const airWarning = airpurity < airThresh.min * 1.1;
   
   if (tempWarning || humWarning || airWarning) {
     return 'warning';

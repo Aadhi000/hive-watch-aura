@@ -24,35 +24,35 @@ const DemoDataProvider: React.FC = () => {
       {
         temperature: 24.5,
         humidity: 68,
-        airPurity: 85,
+        airpurity: 85,
         timestamp: new Date().toISOString(),
         status: 'online'
       },
       {
         temperature: 26.2,
         humidity: 72,
-        airPurity: 78,
+        airpurity: 78,
         timestamp: new Date().toISOString(),
         status: 'online'
       },
       {
         temperature: 31.8, // High temperature - should trigger warning
         humidity: 58, // Low humidity - should trigger warning
-        airPurity: 55, // Low air purity - should trigger danger
+        airpurity: 55, // Low air purity - should trigger danger
         timestamp: new Date().toISOString(),
         status: 'online'
       },
       {
         temperature: 23.1,
         humidity: 65,
-        airPurity: 82,
+        airpurity: 82,
         timestamp: new Date().toISOString(),
         status: 'online'
       },
       {
         temperature: 0,
         humidity: 0,
-        airPurity: 0,
+        airpurity: 0,
         timestamp: new Date(Date.now() - 60000).toISOString(), // 1 minute ago
         status: 'offline'
       }
@@ -69,19 +69,19 @@ const DemoDataProvider: React.FC = () => {
         currentData.status = 'offline';
         currentData.temperature = 0;
         currentData.humidity = 0;
-        currentData.airPurity = 0;
+        currentData.airpurity = 0;
       } else {
         currentData.status = 'online';
         
         // Add some random variation to make it feel more realistic
         currentData.temperature += (Math.random() - 0.5) * 2;
         currentData.humidity += (Math.random() - 0.5) * 5;
-        currentData.airPurity += (Math.random() - 0.5) * 3;
+        currentData.airpurity += (Math.random() - 0.5) * 3;
         
         // Keep values in reasonable ranges
         currentData.temperature = Math.max(15, Math.min(40, currentData.temperature));
         currentData.humidity = Math.max(40, Math.min(90, currentData.humidity));
-        currentData.airPurity = Math.max(40, Math.min(100, currentData.airPurity));
+        currentData.airpurity = Math.max(40, Math.min(100, currentData.airpurity));
       }
 
       console.log('Demo data update:', currentData); // Debug log
@@ -109,7 +109,7 @@ const DemoDataProvider: React.FC = () => {
         historicalData[timestamp.toISOString()] = {
           temperature: Math.max(15, Math.min(35, baseTemp)),
           humidity: Math.max(40, Math.min(90, baseHum)),
-          airPurity: Math.max(50, Math.min(100, baseAir)),
+          airpurity: Math.max(50, Math.min(100, baseAir)),
           timestamp: timestamp.toISOString(),
           status: Math.random() > 0.95 ? 'offline' : 'online' // 5% chance of offline
         };
