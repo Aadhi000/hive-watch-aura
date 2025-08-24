@@ -46,17 +46,28 @@ export const subscribeToSensorData = (callback: (data: SensorData | null) => voi
   const sensorRef = ref(database, 'beehive');
   onValue(sensorRef, (snapshot) => {
     const data = snapshot.val();
+    console.log('Firebase data received:', data);
+    
     if (data) {
       // Determine status based on timestamp
       const now = new Date();
       const lastUpdate = parseTimestamp(data.timestamp);
       const isOnline = lastUpdate && (now.getTime() - lastUpdate.getTime()) < 5 * 60 * 1000; // 5 minutes
       
-      callback({
-        ...data,
-        status: isOnline ? 'online' : 'offline'
-      });
+      console.log('Timestamp parsed:', lastUpdate, 'Is online:', isOnline);
+      
+      const processedData = {
+        temperature: data.temperature || 0,
+        humidity: data.humidity || 0,
+        airpurity: data.airpurity || data.airPurity || 0, // Handle both field names
+        timestamp: data.timestamp,
+        status: isOnline ? 'online' as const : 'offline' as const
+      };
+      
+      console.log('Processed data:', processedData);
+      callback(processedData);
     } else {
+      console.log('No data received from Firebase');
       callback(null);
     }
   });
@@ -115,12 +126,15 @@ export const fetchHistoricalData = async (range: string): Promise<HistoricalData
 export const setupPushNotifications = async (): Promise<string | null> => {
   try {
     if ('serviceWorker' in navigator) {
-      await navigator.serviceWorker.register('/sw.js');
+      await navigator.serviceWorker.register('/firebase-messaging-sw.js');
+      console.log('Firebase messaging service worker registered');
     }
     
     const token = await getToken(messaging, {
-      vapidKey: 'BKxvZ-qX8yQz8tY5V6wX9uP0qR3sT4v5W6xY7z8A9bC0dE1fG2hI3jK4lM5nO6pQ7rS8tU9vW0xY1z2A3bC4dE5f' // Replace with your actual VAPID key
+      vapidKey: 'BLZ8s5S7Z8O_Z5S8s7Z8O_Z5S8s7Z8O_Z5S8s7Z8O_Z5S8s7Z8O_Z5S8s7Z8O_Z5S8s7Z8O_Z5S8s7Z8O' // You'll need to replace this with your actual VAPID key from Firebase Console
     });
+    
+    console.log('FCM token:', token);
     
     // Listen for foreground messages
     onMessage(messaging, (payload) => {

@@ -7,14 +7,17 @@ const DemoDataProvider: React.FC = () => {
 
   useEffect(() => {
     // Check if Firebase is properly configured by checking the apiKey
-    const isFirebaseConfigured = false; // Force demo mode for now
+    const isFirebaseConfigured = true; // Use real Firebase data now
     
     if (!isFirebaseConfigured && !demoRunning) {
+      console.log('Starting demo mode - Firebase not configured');
       setDemoRunning(true);
       const cleanup = startDemoDataSimulation();
       
       // Return cleanup function
       return cleanup;
+    } else {
+      console.log('Using real Firebase data');
     }
   }, [demoRunning]);
 

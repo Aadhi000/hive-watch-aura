@@ -8,7 +8,9 @@ interface StatusIndicatorProps {
 
 const StatusIndicator: React.FC<StatusIndicatorProps> = ({ data }) => {
   const isOnline = data && data.status === 'online';
-  const lastSeen = data?.timestamp ? new Date(data.timestamp) : null;
+  const lastSeen = data?.timestamp ? parseTimestamp(data.timestamp) : null;
+  
+  console.log('StatusIndicator - data:', data, 'lastSeen:', lastSeen, 'isOnline:', isOnline);
 
   const getLastSeenText = () => {
     if (!lastSeen) return 'Never';
